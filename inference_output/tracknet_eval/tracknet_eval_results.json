@@ -1,0 +1,962 @@
+{
+  "model_epoch": 1050,
+  "total_clips": 95,
+  "evaluated_clips": 95,
+  "skipped_clips": 0,
+  "reproj_mean_px": 15.118764485369539,
+  "reproj_median_px": 14.519484371390831,
+  "landing_mean_m": 1.6678964374370353,
+  "landing_median_m": 1.6924473643302917,
+  "clips": [
+    {
+      "game": "game1",
+      "clip": "Clip1",
+      "num_frames": 203,
+      "reproj_mean": 15.78581431146524,
+      "reproj_median": 14.618169638508082,
+      "num_bounces": 9,
+      "h_max": 3.653369426727295,
+      "h_min": 0.15324339270591736
+    },
+    {
+      "game": "game1",
+      "clip": "Clip10",
+      "num_frames": 107,
+      "reproj_mean": 13.201050108477244,
+      "reproj_median": 12.179815696573844,
+      "num_bounces": 3,
+      "h_max": 2.1992719173431396,
+      "h_min": 0.11304350942373276
+    },
+    {
+      "game": "game1",
+      "clip": "Clip11",
+      "num_frames": 130,
+      "reproj_mean": 14.96323094678181,
+      "reproj_median": 15.171694315319499,
+      "num_bounces": 3,
+      "h_max": 2.3506016731262207,
+      "h_min": 0.2241126298904419
+    },
+    {
+      "game": "game1",
+      "clip": "Clip12",
+      "num_frames": 126,
+      "reproj_mean": 16.207584417300414,
+      "reproj_median": 15.681521165213367,
+      "num_bounces": 3,
+      "h_max": 2.3527414798736572,
+      "h_min": 0.2099165916442871
+    },
+    {
+      "game": "game1",
+      "clip": "Clip13",
+      "num_frames": 253,
+      "reproj_mean": 13.91089504119778,
+      "reproj_median": 12.548975141995871,
+      "num_bounces": 12,
+      "h_max": 3.5051591396331787,
+      "h_min": -0.07489922642707825
+    },
+    {
+      "game": "game1",
+      "clip": "Clip2",
+      "num_frames": 130,
+      "reproj_mean": 15.35726622894609,
+      "reproj_median": 15.88202465796191,
+      "num_bounces": 4,
+      "h_max": 2.812384843826294,
+      "h_min": 0.21036309003829956
+    },
+    {
+      "game": "game1",
+      "clip": "Clip3",
+      "num_frames": 63,
+      "reproj_mean": 15.184012330324583,
+      "reproj_median": 16.82889968067347,
+      "num_bounces": 1,
+      "h_max": 1.5281054973602295,
+      "h_min": 0.24088707566261292
+    },
+    {
+      "game": "game1",
+      "clip": "Clip4",
+      "num_frames": 108,
+      "reproj_mean": 15.475230296440632,
+      "reproj_median": 16.41135035343092,
+      "num_bounces": 4,
+      "h_max": 2.3672115802764893,
+      "h_min": 0.3112296462059021
+    },
+    {
+      "game": "game1",
+      "clip": "Clip5",
+      "num_frames": 159,
+      "reproj_mean": 13.145075693397606,
+      "reproj_median": 12.924875692536132,
+      "num_bounces": 9,
+      "h_max": 2.9177052974700928,
+      "h_min": 0.030892308801412582
+    },
+    {
+      "game": "game1",
+      "clip": "Clip6",
+      "num_frames": 78,
+      "reproj_mean": 14.631487681223208,
+      "reproj_median": 15.571727814681626,
+      "num_bounces": 1,
+      "h_max": 1.7272521257400513,
+      "h_min": 0.13601161539554596
+    },
+    {
+      "game": "game1",
+      "clip": "Clip7",
+      "num_frames": 402,
+      "reproj_mean": 15.469060928921559,
+      "reproj_median": 14.015189044498968,
+      "num_bounces": 15,
+      "h_max": 3.1292521953582764,
+      "h_min": -0.14821937680244446
+    },
+    {
+      "game": "game1",
+      "clip": "Clip8",
+      "num_frames": 46,
+      "reproj_mean": 12.230254600044429,
+      "reproj_median": 6.646086256608928,
+      "num_bounces": 1,
+      "h_max": 1.1356369256973267,
+      "h_min": 0.22775012254714966
+    },
+    {
+      "game": "game1",
+      "clip": "Clip9",
+      "num_frames": 115,
+      "reproj_mean": 13.584032157144094,
+      "reproj_median": 13.229059625531109,
+      "num_bounces": 4,
+      "h_max": 2.295107126235962,
+      "h_min": 0.1377914994955063
+    },
+    {
+      "game": "game10",
+      "clip": "Clip1",
+      "num_frames": 316,
+      "reproj_mean": 20.637759567572296,
+      "reproj_median": 19.500737148610085,
+      "num_bounces": 8,
+      "h_max": 3.454061269760132,
+      "h_min": -0.09125041961669922
+    },
+    {
+      "game": "game10",
+      "clip": "Clip10",
+      "num_frames": 166,
+      "reproj_mean": 20.474351128577492,
+      "reproj_median": 18.077916930034164,
+      "num_bounces": 3,
+      "h_max": 3.2364161014556885,
+      "h_min": -0.0918031632900238
+    },
+    {
+      "game": "game10",
+      "clip": "Clip11",
+      "num_frames": 39,
+      "reproj_mean": 14.272735802377193,
+      "reproj_median": 14.45416753212906,
+      "num_bounces": 0,
+      "h_max": 0.6312762498855591,
+      "h_min": 0.2498689889907837
+    },
+    {
+      "game": "game10",
+      "clip": "Clip12",
+      "num_frames": 581,
+      "reproj_mean": 21.9471547449473,
+      "reproj_median": 20.02493813105794,
+      "num_bounces": 15,
+      "h_max": 3.7047808170318604,
+      "h_min": -0.013470053672790527
+    },
+    {
+      "game": "game10",
+      "clip": "Clip2",
+      "num_frames": 132,
+      "reproj_mean": 18.720447431396526,
+      "reproj_median": 17.386473816088994,
+      "num_bounces": 3,
+      "h_max": 2.981417417526245,
+      "h_min": -0.06556051969528198
+    },
+    {
+      "game": "game10",
+      "clip": "Clip3",
+      "num_frames": 188,
+      "reproj_mean": 21.242610416896202,
+      "reproj_median": 20.83149919787992,
+      "num_bounces": 4,
+      "h_max": 3.5256035327911377,
+      "h_min": -0.014577776193618774
+    },
+    {
+      "game": "game10",
+      "clip": "Clip4",
+      "num_frames": 47,
+      "reproj_mean": 20.545752642757996,
+      "reproj_median": 20.933518257672986,
+      "num_bounces": 1,
+      "h_max": 0.8060864210128784,
+      "h_min": 0.24440565705299377
+    },
+    {
+      "game": "game10",
+      "clip": "Clip5",
+      "num_frames": 65,
+      "reproj_mean": 24.706494667048613,
+      "reproj_median": 25.296857499539975,
+      "num_bounces": 1,
+      "h_max": 1.459036111831665,
+      "h_min": 0.3038640320301056
+    },
+    {
+      "game": "game10",
+      "clip": "Clip6",
+      "num_frames": 292,
+      "reproj_mean": 21.249060364569686,
+      "reproj_median": 19.66339198172195,
+      "num_bounces": 7,
+      "h_max": 3.317167043685913,
+      "h_min": -0.11248883605003357
+    },
+    {
+      "game": "game10",
+      "clip": "Clip7",
+      "num_frames": 142,
+      "reproj_mean": 21.306064919080924,
+      "reproj_median": 20.447070320800623,
+      "num_bounces": 3,
+      "h_max": 3.610933303833008,
+      "h_min": 0.0719100683927536
+    },
+    {
+      "game": "game10",
+      "clip": "Clip8",
+      "num_frames": 65,
+      "reproj_mean": 21.84083392398994,
+      "reproj_median": 21.596198732903623,
+      "num_bounces": 2,
+      "h_max": 1.4220929145812988,
+      "h_min": 0.24384227395057678
+    },
+    {
+      "game": "game10",
+      "clip": "Clip9",
+      "num_frames": 49,
+      "reproj_mean": 23.201221797868147,
+      "reproj_median": 23.16068671411436,
+      "num_bounces": 1,
+      "h_max": 0.9246891736984253,
+      "h_min": 0.25351399183273315
+    },
+    {
+      "game": "game2",
+      "clip": "Clip1",
+      "num_frames": 361,
+      "reproj_mean": 19.51968913201386,
+      "reproj_median": 18.049760929062913,
+      "num_bounces": 10,
+      "h_max": 4.155519008636475,
+      "h_min": -0.10687342286109924
+    },
+    {
+      "game": "game2",
+      "clip": "Clip2",
+      "num_frames": 199,
+      "reproj_mean": 22.771888473254492,
+      "reproj_median": 20.360795583588434,
+      "num_bounces": 5,
+      "h_max": 2.897704601287842,
+      "h_min": -0.1704031229019165
+    },
+    {
+      "game": "game2",
+      "clip": "Clip3",
+      "num_frames": 36,
+      "reproj_mean": 18.091873833864266,
+      "reproj_median": 19.584942956976057,
+      "num_bounces": 1,
+      "h_max": 0.5677193403244019,
+      "h_min": 0.3421688377857208
+    },
+    {
+      "game": "game2",
+      "clip": "Clip4",
+      "num_frames": 45,
+      "reproj_mean": 19.52004012176225,
+      "reproj_median": 21.36825464321847,
+      "num_bounces": 1,
+      "h_max": 0.8972949981689453,
+      "h_min": 0.29956990480422974
+    },
+    {
+      "game": "game2",
+      "clip": "Clip5",
+      "num_frames": 196,
+      "reproj_mean": 18.730644071192323,
+      "reproj_median": 16.85856603397651,
+      "num_bounces": 6,
+      "h_max": 3.214639902114868,
+      "h_min": -0.13885590434074402
+    },
+    {
+      "game": "game2",
+      "clip": "Clip6",
+      "num_frames": 548,
+      "reproj_mean": 19.242654110369653,
+      "reproj_median": 17.606084195129778,
+      "num_bounces": 15,
+      "h_max": 3.6315951347351074,
+      "h_min": -0.1112331748008728
+    },
+    {
+      "game": "game2",
+      "clip": "Clip7",
+      "num_frames": 189,
+      "reproj_mean": 17.849048622466544,
+      "reproj_median": 17.166159752472268,
+      "num_bounces": 5,
+      "h_max": 3.755981683731079,
+      "h_min": -0.06619742512702942
+    },
+    {
+      "game": "game2",
+      "clip": "Clip8",
+      "num_frames": 645,
+      "reproj_mean": 20.255991661228116,
+      "reproj_median": 17.822627784293722,
+      "num_bounces": 22,
+      "h_max": 4.066020965576172,
+      "h_min": -0.09827545285224915
+    },
+    {
+      "game": "game3",
+      "clip": "Clip1",
+      "num_frames": 177,
+      "reproj_mean": 18.14228758017336,
+      "reproj_median": 15.556620908560207,
+      "num_bounces": 5,
+      "h_max": 3.6814048290252686,
+      "h_min": 0.2103855311870575
+    },
+    {
+      "game": "game3",
+      "clip": "Clip2",
+      "num_frames": 29,
+      "reproj_mean": 14.446770870537774,
+      "reproj_median": 15.401476107370817,
+      "num_bounces": 1,
+      "h_max": 0.8488455414772034,
+      "h_min": 0.07471083849668503
+    },
+    {
+      "game": "game3",
+      "clip": "Clip3",
+      "num_frames": 364,
+      "reproj_mean": 14.411791680828562,
+      "reproj_median": 12.651889467577977,
+      "num_bounces": 10,
+      "h_max": 3.4925506114959717,
+      "h_min": -0.14008691906929016
+    },
+    {
+      "game": "game3",
+      "clip": "Clip4",
+      "num_frames": 405,
+      "reproj_mean": 14.451682359202383,
+      "reproj_median": 12.472742442879238,
+      "num_bounces": 8,
+      "h_max": 3.6387720108032227,
+      "h_min": -0.0757673978805542
+    },
+    {
+      "game": "game3",
+      "clip": "Clip5",
+      "num_frames": 133,
+      "reproj_mean": 14.110424932532828,
+      "reproj_median": 13.809576276079039,
+      "num_bounces": 3,
+      "h_max": 2.6312477588653564,
+      "h_min": 0.40318018198013306
+    },
+    {
+      "game": "game3",
+      "clip": "Clip6",
+      "num_frames": 178,
+      "reproj_mean": 13.72583952768831,
+      "reproj_median": 13.56171277446175,
+      "num_bounces": 5,
+      "h_max": 2.883244752883911,
+      "h_min": 0.25346529483795166
+    },
+    {
+      "game": "game3",
+      "clip": "Clip7",
+      "num_frames": 214,
+      "reproj_mean": 12.090386577655648,
+      "reproj_median": 11.538457654146118,
+      "num_bounces": 6,
+      "h_max": 2.7185001373291016,
+      "h_min": 0.38062313199043274
+    },
+    {
+      "game": "game3",
+      "clip": "Clip8",
+      "num_frames": 47,
+      "reproj_mean": 13.297824291550869,
+      "reproj_median": 13.501993348911226,
+      "num_bounces": 1,
+      "h_max": 1.1943100690841675,
+      "h_min": 0.379541277885437
+    },
+    {
+      "game": "game3",
+      "clip": "Clip9",
+      "num_frames": 137,
+      "reproj_mean": 13.440126320193292,
+      "reproj_median": 13.481878491854822,
+      "num_bounces": 3,
+      "h_max": 2.4875550270080566,
+      "h_min": 0.4547359049320221
+    },
+    {
+      "game": "game4",
+      "clip": "Clip1",
+      "num_frames": 597,
+      "reproj_mean": 6.820859185215133,
+      "reproj_median": 4.5779673512339505,
+      "num_bounces": 16,
+      "h_max": 3.5428507328033447,
+      "h_min": 0.16452719271183014
+    },
+    {
+      "game": "game4",
+      "clip": "Clip2",
+      "num_frames": 485,
+      "reproj_mean": 5.18953971195346,
+      "reproj_median": 3.2443561472969957,
+      "num_bounces": 12,
+      "h_max": 3.931946039199829,
+      "h_min": 0.01111939549446106
+    },
+    {
+      "game": "game4",
+      "clip": "Clip3",
+      "num_frames": 112,
+      "reproj_mean": 4.364136590933325,
+      "reproj_median": 2.5949192652151023,
+      "num_bounces": 3,
+      "h_max": 1.1986312866210938,
+      "h_min": 0.0007071793079376221
+    },
+    {
+      "game": "game4",
+      "clip": "Clip4",
+      "num_frames": 102,
+      "reproj_mean": 4.69729951569239,
+      "reproj_median": 4.8130423861395055,
+      "num_bounces": 2,
+      "h_max": 0.981041431427002,
+      "h_min": 0.3173685073852539
+    },
+    {
+      "game": "game4",
+      "clip": "Clip5",
+      "num_frames": 222,
+      "reproj_mean": 5.938259198251386,
+      "reproj_median": 3.804270090435062,
+      "num_bounces": 5,
+      "h_max": 3.0506365299224854,
+      "h_min": -0.07533817738294601
+    },
+    {
+      "game": "game4",
+      "clip": "Clip6",
+      "num_frames": 233,
+      "reproj_mean": 6.995952110234811,
+      "reproj_median": 5.020182587063234,
+      "num_bounces": 4,
+      "h_max": 2.8964571952819824,
+      "h_min": -0.09628265351057053
+    },
+    {
+      "game": "game4",
+      "clip": "Clip7",
+      "num_frames": 435,
+      "reproj_mean": 5.613922829726636,
+      "reproj_median": 3.5587953688683593,
+      "num_bounces": 11,
+      "h_max": 3.8364858627319336,
+      "h_min": -0.10723908990621567
+    },
+    {
+      "game": "game5",
+      "clip": "Clip1",
+      "num_frames": 191,
+      "reproj_mean": 14.916832820782584,
+      "reproj_median": 13.75083629504565,
+      "num_bounces": 4,
+      "h_max": 3.826261520385742,
+      "h_min": -0.18545815348625183
+    },
+    {
+      "game": "game5",
+      "clip": "Clip10",
+      "num_frames": 110,
+      "reproj_mean": 13.037196069595348,
+      "reproj_median": 12.068738603030152,
+      "num_bounces": 3,
+      "h_max": 2.3054561614990234,
+      "h_min": 0.3872802257537842
+    },
+    {
+      "game": "game5",
+      "clip": "Clip11",
+      "num_frames": 36,
+      "reproj_mean": 15.159319467940183,
+      "reproj_median": 15.608994173751402,
+      "num_bounces": 1,
+      "h_max": 0.9554822444915771,
+      "h_min": 0.2557903826236725
+    },
+    {
+      "game": "game5",
+      "clip": "Clip12",
+      "num_frames": 169,
+      "reproj_mean": 15.137835797720307,
+      "reproj_median": 12.118786300739705,
+      "num_bounces": 4,
+      "h_max": 2.51291561126709,
+      "h_min": -0.1606864631175995
+    },
+    {
+      "game": "game5",
+      "clip": "Clip13",
+      "num_frames": 43,
+      "reproj_mean": 13.973320907804522,
+      "reproj_median": 13.932236525380867,
+      "num_bounces": 1,
+      "h_max": 1.1196638345718384,
+      "h_min": 0.2655397653579712
+    },
+    {
+      "game": "game5",
+      "clip": "Clip14",
+      "num_frames": 35,
+      "reproj_mean": 16.149355177189726,
+      "reproj_median": 17.13583201084815,
+      "num_bounces": 1,
+      "h_max": 0.7581841945648193,
+      "h_min": 0.23747849464416504
+    },
+    {
+      "game": "game5",
+      "clip": "Clip15",
+      "num_frames": 135,
+      "reproj_mean": 12.913959326824616,
+      "reproj_median": 13.756253839315404,
+      "num_bounces": 5,
+      "h_max": 2.410568952560425,
+      "h_min": 0.33391064405441284
+    },
+    {
+      "game": "game5",
+      "clip": "Clip2",
+      "num_frames": 57,
+      "reproj_mean": 15.080281906276053,
+      "reproj_median": 15.86182860348623,
+      "num_bounces": 1,
+      "h_max": 1.4832618236541748,
+      "h_min": 0.14334848523139954
+    },
+    {
+      "game": "game5",
+      "clip": "Clip3",
+      "num_frames": 66,
+      "reproj_mean": 14.425713901847093,
+      "reproj_median": 15.102960185007575,
+      "num_bounces": 1,
+      "h_max": 1.7180070877075195,
+      "h_min": 0.14678378403186798
+    },
+    {
+      "game": "game5",
+      "clip": "Clip4",
+      "num_frames": 247,
+      "reproj_mean": 16.108122480531886,
+      "reproj_median": 12.6834624285322,
+      "num_bounces": 7,
+      "h_max": 3.12168550491333,
+      "h_min": -0.21338361501693726
+    },
+    {
+      "game": "game5",
+      "clip": "Clip5",
+      "num_frames": 110,
+      "reproj_mean": 13.424102210660749,
+      "reproj_median": 11.915247930589004,
+      "num_bounces": 3,
+      "h_max": 2.0954959392547607,
+      "h_min": 0.03233381360769272
+    },
+    {
+      "game": "game5",
+      "clip": "Clip6",
+      "num_frames": 221,
+      "reproj_mean": 13.45203255537308,
+      "reproj_median": 12.101038516228657,
+      "num_bounces": 5,
+      "h_max": 3.0116119384765625,
+      "h_min": -0.001519322395324707
+    },
+    {
+      "game": "game5",
+      "clip": "Clip7",
+      "num_frames": 191,
+      "reproj_mean": 13.053733237785737,
+      "reproj_median": 12.454933457779463,
+      "num_bounces": 5,
+      "h_max": 3.206247091293335,
+      "h_min": 0.08706972748041153
+    },
+    {
+      "game": "game5",
+      "clip": "Clip8",
+      "num_frames": 117,
+      "reproj_mean": 12.118814697628888,
+      "reproj_median": 9.954365613248418,
+      "num_bounces": 3,
+      "h_max": 2.028672695159912,
+      "h_min": 0.044875618070364
+    },
+    {
+      "game": "game5",
+      "clip": "Clip9",
+      "num_frames": 181,
+      "reproj_mean": 14.198212501594181,
+      "reproj_median": 13.761640622818064,
+      "num_bounces": 7,
+      "h_max": 3.494004726409912,
+      "h_min": 0.33140644431114197
+    },
+    {
+      "game": "game6",
+      "clip": "Clip1",
+      "num_frames": 576,
+      "reproj_mean": 14.383647349781093,
+      "reproj_median": 11.857548774962149,
+      "num_bounces": 14,
+      "h_max": 2.399362564086914,
+      "h_min": -0.06741052865982056
+    },
+    {
+      "game": "game6",
+      "clip": "Clip2",
+      "num_frames": 578,
+      "reproj_mean": 12.672904608798373,
+      "reproj_median": 10.570205378388641,
+      "num_bounces": 16,
+      "h_max": 3.4885594844818115,
+      "h_min": -0.12091776728630066
+    },
+    {
+      "game": "game6",
+      "clip": "Clip3",
+      "num_frames": 528,
+      "reproj_mean": 16.23768793130695,
+      "reproj_median": 17.164914680036354,
+      "num_bounces": 9,
+      "h_max": 2.8137402534484863,
+      "h_min": -0.1667550802230835
+    },
+    {
+      "game": "game6",
+      "clip": "Clip4",
+      "num_frames": 272,
+      "reproj_mean": 12.243419289098062,
+      "reproj_median": 11.665432869661906,
+      "num_bounces": 7,
+      "h_max": 3.653308391571045,
+      "h_min": 0.3693373203277588
+    },
+    {
+      "game": "game7",
+      "clip": "Clip1",
+      "num_frames": 124,
+      "reproj_mean": 20.79462264508683,
+      "reproj_median": 18.473255517928965,
+      "num_bounces": 4,
+      "h_max": 2.1788859367370605,
+      "h_min": 0.19781121611595154
+    },
+    {
+      "game": "game7",
+      "clip": "Clip2",
+      "num_frames": 202,
+      "reproj_mean": 18.88287255028772,
+      "reproj_median": 18.118032660386987,
+      "num_bounces": 6,
+      "h_max": 2.569303274154663,
+      "h_min": -0.16704124212265015
+    },
+    {
+      "game": "game7",
+      "clip": "Clip3",
+      "num_frames": 46,
+      "reproj_mean": 19.5207047103452,
+      "reproj_median": 21.766274718541215,
+      "num_bounces": 1,
+      "h_max": 0.9052078723907471,
+      "h_min": 0.16914069652557373
+    },
+    {
+      "game": "game7",
+      "clip": "Clip4",
+      "num_frames": 870,
+      "reproj_mean": 19.728891980403375,
+      "reproj_median": 18.253575338976262,
+      "num_bounces": 26,
+      "h_max": 4.19255256652832,
+      "h_min": -0.20995724201202393
+    },
+    {
+      "game": "game7",
+      "clip": "Clip5",
+      "num_frames": 186,
+      "reproj_mean": 18.503974087541327,
+      "reproj_median": 18.303666658188355,
+      "num_bounces": 4,
+      "h_max": 3.9983904361724854,
+      "h_min": -0.0883849561214447
+    },
+    {
+      "game": "game7",
+      "clip": "Clip6",
+      "num_frames": 85,
+      "reproj_mean": 22.945152759754638,
+      "reproj_median": 21.33864506354846,
+      "num_bounces": 2,
+      "h_max": 1.9930363893508911,
+      "h_min": 0.3364681303501129
+    },
+    {
+      "game": "game7",
+      "clip": "Clip7",
+      "num_frames": 124,
+      "reproj_mean": 17.319348160057917,
+      "reproj_median": 15.224051418078233,
+      "num_bounces": 3,
+      "h_max": 2.555277109146118,
+      "h_min": 0.33303990960121155
+    },
+    {
+      "game": "game7",
+      "clip": "Clip8",
+      "num_frames": 35,
+      "reproj_mean": 17.729552309071053,
+      "reproj_median": 12.61363294741355,
+      "num_bounces": 0,
+      "h_max": 0.9486037492752075,
+      "h_min": 0.1936548352241516
+    },
+    {
+      "game": "game7",
+      "clip": "Clip9",
+      "num_frames": 84,
+      "reproj_mean": 13.492314717400989,
+      "reproj_median": 10.730490308818993,
+      "num_bounces": 2,
+      "h_max": 1.8175127506256104,
+      "h_min": 0.11535035073757172
+    },
+    {
+      "game": "game8",
+      "clip": "Clip1",
+      "num_frames": 118,
+      "reproj_mean": 10.62267158823438,
+      "reproj_median": 9.054932672103375,
+      "num_bounces": 3,
+      "h_max": 1.9868794679641724,
+      "h_min": 0.2350223809480667
+    },
+    {
+      "game": "game8",
+      "clip": "Clip2",
+      "num_frames": 95,
+      "reproj_mean": 12.083112890873211,
+      "reproj_median": 11.733015704744268,
+      "num_bounces": 2,
+      "h_max": 1.8108545541763306,
+      "h_min": 0.025447173044085503
+    },
+    {
+      "game": "game8",
+      "clip": "Clip3",
+      "num_frames": 383,
+      "reproj_mean": 12.114387254850191,
+      "reproj_median": 9.703943180752258,
+      "num_bounces": 11,
+      "h_max": 3.762676477432251,
+      "h_min": -0.08546226471662521
+    },
+    {
+      "game": "game8",
+      "clip": "Clip4",
+      "num_frames": 133,
+      "reproj_mean": 11.643725037451894,
+      "reproj_median": 10.517834285704897,
+      "num_bounces": 4,
+      "h_max": 2.379671812057495,
+      "h_min": 0.36559611558914185
+    },
+    {
+      "game": "game8",
+      "clip": "Clip5",
+      "num_frames": 79,
+      "reproj_mean": 13.299621543654379,
+      "reproj_median": 13.743049807962821,
+      "num_bounces": 2,
+      "h_max": 1.7709922790527344,
+      "h_min": 0.09861819446086884
+    },
+    {
+      "game": "game8",
+      "clip": "Clip6",
+      "num_frames": 66,
+      "reproj_mean": 12.76493619409023,
+      "reproj_median": 12.275524876713902,
+      "num_bounces": 2,
+      "h_max": 1.5625267028808594,
+      "h_min": 0.08035299926996231
+    },
+    {
+      "game": "game8",
+      "clip": "Clip7",
+      "num_frames": 422,
+      "reproj_mean": 11.369920179009315,
+      "reproj_median": 10.18080736327104,
+      "num_bounces": 10,
+      "h_max": 3.814988136291504,
+      "h_min": -0.02744114398956299
+    },
+    {
+      "game": "game8",
+      "clip": "Clip8",
+      "num_frames": 319,
+      "reproj_mean": 11.240567493830682,
+      "reproj_median": 10.153183683965118,
+      "num_bounces": 9,
+      "h_max": 3.57509708404541,
+      "h_min": 0.4970795214176178
+    },
+    {
+      "game": "game8",
+      "clip": "Clip9",
+      "num_frames": 238,
+      "reproj_mean": 12.101924885944143,
+      "reproj_median": 10.940625338421857,
+      "num_bounces": 6,
+      "h_max": 3.598422050476074,
+      "h_min": 0.2789627015590668
+    },
+    {
+      "game": "game9",
+      "clip": "Clip1",
+      "num_frames": 83,
+      "reproj_mean": 15.182143380255917,
+      "reproj_median": 14.95973331194373,
+      "num_bounces": 2,
+      "h_max": 1.928238868713379,
+      "h_min": 0.3537462055683136
+    },
+    {
+      "game": "game9",
+      "clip": "Clip2",
+      "num_frames": 258,
+      "reproj_mean": 17.12952969407506,
+      "reproj_median": 15.696895752247674,
+      "num_bounces": 9,
+      "h_max": 3.307640552520752,
+      "h_min": -0.17855241894721985
+    },
+    {
+      "game": "game9",
+      "clip": "Clip3",
+      "num_frames": 359,
+      "reproj_mean": 17.23869442974374,
+      "reproj_median": 15.748927167749184,
+      "num_bounces": 10,
+      "h_max": 3.7856650352478027,
+      "h_min": -0.11418229341506958
+    },
+    {
+      "game": "game9",
+      "clip": "Clip4",
+      "num_frames": 106,
+      "reproj_mean": 16.767354542827377,
+      "reproj_median": 16.52574523355173,
+      "num_bounces": 3,
+      "h_max": 2.1990394592285156,
+      "h_min": 0.4376720190048218
+    },
+    {
+      "game": "game9",
+      "clip": "Clip5",
+      "num_frames": 262,
+      "reproj_mean": 17.070417773550762,
+      "reproj_median": 17.482210748865015,
+      "num_bounces": 8,
+      "h_max": 3.692455768585205,
+      "h_min": -0.13592571020126343
+    },
+    {
+      "game": "game9",
+      "clip": "Clip6",
+      "num_frames": 109,
+      "reproj_mean": 16.653949270912392,
+      "reproj_median": 15.783810612925727,
+      "num_bounces": 3,
+      "h_max": 1.8678715229034424,
+      "h_min": 0.4545481503009796
+    },
+    {
+      "game": "game9",
+      "clip": "Clip7",
+      "num_frames": 87,
+      "reproj_mean": 14.59005871775502,
+      "reproj_median": 14.50835926914289,
+      "num_bounces": 2,
+      "h_max": 1.9058234691619873,
+      "h_min": 0.30204567313194275
+    },
+    {
+      "game": "game9",
+      "clip": "Clip8",
+      "num_frames": 56,
+      "reproj_mean": 16.711933190228716,
+      "reproj_median": 18.292208367034675,
+      "num_bounces": 1,
+      "h_max": 1.240605354309082,
+      "h_min": 0.3456568419933319
+    },
+    {
+      "game": "game9",
+      "clip": "Clip9",
+      "num_frames": 223,
+      "reproj_mean": 15.727341630882098,
+      "reproj_median": 14.409923264309963,
+      "num_bounces": 7,
+      "h_max": 3.6973698139190674,
+      "h_min": 0.46632909774780273
+    }
+  ]
+}

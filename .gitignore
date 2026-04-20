@@ -1,29 +1,72 @@
-# Model weights / checkpoints
-checkpoints/
-checkpoints_*/
-*.pt
-*.pth
-*.ckpt
-*.tar
-*.pkl
+# ============================================================
+# Only track scripts/code for the 3D ball tracking pipeline.
+# Ignore everything by default, then whitelist what matters.
+# ============================================================
 
-# Videos
-*.mp4
-*.avi
-*.mov
-*.mkv
+# Ignore everything
+*
 
-# Large training logs
-training*.log
-train_stdout.log
+# --- Git / repo ---
+!.gitignore
+!README.md
+!Readme_3D.md
+!requirements.txt
 
-# Python caches
-__pycache__/
-*.pyc
-*.pyo
+# --- Root-level scripts ---
+!ball_tracker.py
+!wasb_ball_detect.py
+!parallel_collect.sh
+!ours_to_npz.py
+!paper_to_npz.py
 
-# Editor/OS junk
-.DS_Store
-*.swp
-.idea/
-.vscode/
+# --- Input data for real video inference ---
+!S_Original_HL_clip_cropped.mp4
+!wasb_ball_positions.csv
+
+# --- Core LSTM pipeline ---
+!LSTM_Model/
+!LSTM_Model/**
+LSTM_Model/checkpoints*/
+LSTM_Model/inference_output/
+LSTM_Model/outputs/
+LSTM_Model/paper/
+LSTM_Model/__pycache__/
+LSTM_Model/**/__pycache__/
+LSTM_Model/*.log
+LSTM_Model/*.png
+LSTM_Model/utils/
+
+# --- TrackNet (2D ball detection) ---
+!TrackNet/
+!TrackNet/**
+TrackNet/__pycache__/
+TrackNet/checkpoint/
+TrackNet/datasets/
+TrackNet/pics/
+
+# --- Court detection ---
+!TennisCourtDetector/
+!TennisCourtDetector/**
+TennisCourtDetector/__pycache__/
+TennisCourtDetector/*.pt
+TennisCourtDetector/*.png
+TennisCourtDetector/imgs/
+
+# --- 3D viewer ---
+!viewer_3d/
+!viewer_3d/**
+
+# --- Tennis analysis (court + tracking) ---
+!tennis_analysis/
+!tennis_analysis/**
+tennis_analysis/__pycache__/
+tennis_analysis/**/__pycache__/
+tennis_analysis/input_videos/
+tennis_analysis/output_videos/
+tennis_analysis/inference_output/
+tennis_analysis/runs/
+tennis_analysis/models/
+tennis_analysis/training/
+
+# --- Deactivated nested git repos ---
+.git_bak/

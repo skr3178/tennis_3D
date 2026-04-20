@@ -19,9 +19,10 @@
 !ours_to_npz.py
 !paper_to_npz.py
 
-# --- GIFs for README ---
+# --- GIFs and images for README ---
 !3_channel.gif
 !S_3D_skeleton.gif
+!social_preview.png
 
 # --- Input data for real video inference ---
 !S_Original_HL_clip_cropped.mp4

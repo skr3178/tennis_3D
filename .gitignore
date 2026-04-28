@@ -23,6 +23,18 @@
 !viewer_3d/
 !viewer_3d/**
 
+# --- LSTM_Model (paper implementation code) ---
+!LSTM_Model/
+!LSTM_Model/**
+LSTM_Model/checkpoints*/
+LSTM_Model/inference_output/
+LSTM_Model/outputs/
+LSTM_Model/paper/
+LSTM_Model/__pycache__/
+LSTM_Model/**/__pycache__/
+LSTM_Model/.git_bak/
+LSTM_Model/*.log
+
 # --- Large / binary / external excludes ---
 *.gif
 *.mov

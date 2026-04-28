@@ -1,0 +1,151 @@
+## 21 April: 
+
+- Ablation studies on the synthetic dataset: Loss terms: L_1, L_2, L_3
+
+- test the 2d to 3d algorithm- Use of extrinsics | dehomogenic operator | 
+- As per the screenshots- serves are not included - volleys are not included - 
+- Ball tracking has to be accurate at first
+- EoT network has to be accurate- dependent following that
+- Camera position needs to be accurate too - check with some existing setups if any
+- check the lambda values match the paper
+- noise should be added [u_t, v_t]
+- effects of invariance
+- check the operator: r* | converts h_t --> [x,y,z]
+- Dataset stats: [seq. len, time steps, max. height]
+
+
+
+
+
+
+## The real gaps are in the data itself and in how we trained:
+
+1. Training set is half the paper's size. ours_game_5000_trimmed actually contains 2,417 sequences despite the name. Paper
+§C: "5000 training sequences" for synthetic TrackNet.
+2. Training sequences are ~4× shorter than real TrackNet clips.
+- Ours: seq_len mean 119, min 53, max 234
+- Paper's synthetic TrackNet: length 64–822, ~3 strokes each (§C)
+- Real TrackNet: we saw clips up to 870 frames in this eval (game7/Clip4)
+
+This matters a lot: LSTM^f / LSTM^b are recurrent accumulators — they only learn to stay stable for horizons they were
+exposed to. The model has literally never seen a 500-frame unroll. On long real clips the height accumulator drifts well
+past what any training gradient taught it to correct.
+3. Under-trained. 608 epochs logged, best ckpt at ep 540. Paper schedule is 1,400 epochs. We're at ~40% of the paper's
+training budget, and the val NRMSE at ep 540 (0.024) is still wiggling — not converged.
+4. Physics coverage is probably thinner. Paper's Unity/PhysX pipeline is tuned to "simulate a tennis game with two
+players" (§4.1). Our max ball height is 3.67 m — that covers normal bounces but serves can reach 5 m (toss apex) and
+smashes are ~3 m racket contact; worth checking the stroke mix.
+5. Game 4 is the worst game (23.9 m error) and has the most extreme camera — fx=1100, height 3.82 m, elevation 9.9°.
+That's at the corner of our training distribution (only a handful of our sequences have fx≈1100 and height<4 m and
+elevation<10° simultaneously). Probably sparse coverage.
+
+What would likely close most of the gap, in decreasing cost/benefit order:
+
+- A. Resume training to 1,400 epochs. Cheap. Your train log already shows val NRMSE still drifting — you're leaving
+accuracy on the table.
+- B. Regenerate training data with paper-spec lengths (64–822 frames, ~3 strokes each). Medium cost but probably the
+single biggest lever — long-horizon LSTM behaviour cannot be fixed by more epochs on short sequences.
+- C. Increase training size to 5,000 sequences to match paper §C.
+- D. Fill gaps at the low-focal / low-elevation corner of camera space where game4 sits.
+- E. Everything else (noise aug, loss weights, etc.) — don't touch; we match the paper there.
+
+
+
+The val_pred_vs_gt.png panel confirms it qualitatively — predicted (blue) and GT (red) trajectories overlay almost
+perfectly in top-down and side views, across 6 sampled sequences.
+
+So the model is correct — better than the paper on synthetic, in fact (2.4% NRMSE vs 9%). The training loss, the held-out
+val NRMSE, and the visual overlay all agree.
+
+Now put the two together:
+
+┌────────────────────────────────────────────────────┬────────────────────────────────────────┬────────┐
+│                       Domain                       │               Our 5k_v2                │ Paper  │
+├────────────────────────────────────────────────────┼────────────────────────────────────────┼────────┤
+│ Synthetic Tennis val (held-out, same distribution) │ NRMSE 0.024, 7 cm height err           │ 0.09   │
+├────────────────────────────────────────────────────┼────────────────────────────────────────┼────────┤
+│ Real TrackNet (distribution shift)                 │ 10.99 m landing err / 1.5 m height err │ 0.63 m │
+└────────────────────────────────────────────────────┴────────────────────────────────────────┴────────┘
+
+The model is not broken — the domain is broken. On synthetic, we're state-of-the-art. On real TrackNet, we're 10–17× off.
+That is textbook sim-to-real gap: 7 cm height error on sim → 150 cm height error on real. The paper saw this too (§5:
+"spin, aerodynamics, court type") but their gap on TrackNet is only ~3× relative to their synthetic — much smaller than
+ours, which suggests their synthetic data is distributionally closer to the broadcast cameras / stroke mix /
+tracking-noise statistics of real TrackNet than ours is.
+
+
+┌─────────────────────────────┬─────────────────────────────────┬─────────────────────┐
+│           Metric            │      Ours (5k_v2, ep 540)       │ Paper (Table 4 avg) │
+├─────────────────────────────┼─────────────────────────────────┼─────────────────────┤
+│ Landing error (x-z plane)   │ mean 10.99 m · median 6.21 m    │ 0.63 m              │
+├─────────────────────────────┼─────────────────────────────────┼─────────────────────┤
+│ T.acc ≤ 0.25 m              │ 1.9%                            │ —                   │
+├─────────────────────────────┼─────────────────────────────────┼─────────────────────┤
+│ T.acc ≤ 0.50 m              │ 3.1%                            │ —                   │
+├─────────────────────────────┼─────────────────────────────────┼─────────────────────┤
+│ T.acc ≤ 1.00 m              │ 5.6%                            │ —                   │
+├─────────────────────────────┼─────────────────────────────────┼─────────────────────┤
+│ T.acc ≤ 2.00 m              │ 18.2%                           │ —                   │
+├─────────────────────────────┼─────────────────────────────────┼─────────────────────┤
+│ T.F1 (eps≥0.5, ≤0.5 m)      │ 0.011                           │ 0.807               │
+├─────────────────────────────┼─────────────────────────────────┼─────────────────────┤
+│ Landing height error (diag) │ 1.77 m / 1.51 m                 │ —                   │
+├─────────────────────────────┼─────────────────────────────────┼─────────────────────┤
+│ Reprojection                │ 10.6 px / 5.1 px (71.6% <10 px) │ —                   │
+└─────────────────────────────┴─────────────────────────────────┴─────────────────────┘
+
+Summary: a ~10–17× gap on the headline landing metric, and essentially no usable bounce F1. Paper achieves 87.2% avg T.acc
+and 0.81 F1 with a similar architecture trained similarly; we're at 3% and 0.01.
+
+Interpretation — most of the 11 m error is geometry, not 11 m of 3D error. Reprojection is fine (5 px median), so the 3D
+(x,y,z) is consistent with the 2D input — but the predicted y is ~1.5 m above ground at GT bounces, and for a broadcast
+camera at ~7.85 m height and ~44 m distance, that 1.5 m height bias projects to ~1/tan(10°) ≈ 5–8 m of x-z displacement.
+That matches our 6.2 m median landing error almost exactly. The numbers are geometrically self-consistent: one root cause
+= height head not going to zero at ground contact on real data.
+
+Per-game landing means range 7.6 – 23.9 m — game4 (23.9 m) is a strong outlier, worth inspecting the calibration vis. All
+other games cluster around 7–13 m.
+
+Bottom line: yes, this is a real sim-to-real gap, and it is much larger than the paper reports. Two realistic causes:
+
+1. The v2 checkpoint is at epoch 540 of a 1400-epoch schedule — undertrained.
+2. The v2 training data may not match the paper's synthetic TrackNet distribution (camera angles, stroke variety), so no
+amount of training closes it.
+
+Results JSON saved to inference_output/tracknet_eval_5k_v2_landing/tracknet_eval_landing_results.json.
+
+
+## Try this fix
+
+This is a **smoking gun**. Here's the distribution mismatch:
+
+| Feature   | Synthetic (training)               | Real TrackNet                      |
+| --------- | ---------------------------------- | ---------------------------------- |
+| **p_g.z** | **[2.25, 47.74]**, always positive | **[-16.67, 69.36]**, ~30% negative |
+| **p_v.y** | **[1.97, 7.71]**, always positive  | **[-9.04, 4.68]**, ~30% negative   |
+| p_g.z < 0 | **0%**                             | **~30%**                           |
+| p_v.y < 0 | **0%**                             | **~30%**                           |
+
+The problem is exactly what you suspected. Here's the geometry:
+
+**z=0 is at the net.** In the real TrackNet world coordinate system (from PnP with court keypoints), the baselines sit at z=±11.885m. When the ball is on the **camera side** of the net (z < 0), the ray from the camera through the ball must be extended **past the ball and through the net plane** to reach z=0. This produces a **negative p_v.y** — the vertical-plane intersection is *below ground*.
+
+Our synthetic training data applied a `z_shift` of +18.3m, pushing **all** ball positions to z > 1.0. The model has **never seen negative p_v.y** or negative p_g.z. Then at inference on real data, ~30% of frames have these values.
+
+This is catastrophic for `lift_to_3d`:
+```
+t = h / p_v.y
+```
+If p_v.y is negative but h is positive (ball above ground), then t < 0, which produces:
+- `z = p_g.z * (1 - t)` — z gets pushed in the wrong direction
+- `x = p_g.x + t * (p_v.x - p_g.x)` — x also inverted
+
+The refinement LSTM can't recover from this because the initial `r_t` is geometrically flipped. This alone could explain the 11m landing error.
+
+**The fix options:**
+1. **Match the paper**: set z=0 at the net in both training AND inference (don't shift synthetic z), so the model learns to handle negative-z balls
+2. **Shift real data too**: at inference time, translate the world coordinate system so all z > 0 (same convention as training) — this is easier but means redefining the extrinsic matrix per-clip
+
+Option 2 is the quick fix. Want me to implement it?
+
+

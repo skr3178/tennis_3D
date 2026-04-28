@@ -1,0 +1,47 @@
+# Snapshot branch for github.com/skr3178/tennis_3D
+# Whitelist: root-level source/notes/images + viewer_3d only.
+*
+
+# --- Allowed extensions at root ---
+!*.py
+!*.md
+!*.sh
+!*.csv
+!*.txt
+!*.html
+!*.png
+!*.jpg
+!*.jpeg
+!.gitignore
+!To-Do
+
+# --- Allowed root data ---
+!S_Original_HL_clip_cropped.mp4
+!S_Original_HL_clip_cropped_2s.mp4
+
+# --- Viewer ---
+!viewer_3d/
+!viewer_3d/**
+
+# --- Large / binary / external excludes ---
+*.gif
+*.mov
+3_channel.mp4
+S_3D_skeleton.mp4
+side_by_side_comparison.mp4
+schematic_output.mp4
+wasb_ball_output.mp4
+X_*.mp4
+*.tar
+*.tgz
+*.pth.tar
+*.pt
+*.json
+*.log
+*.pdf
+.codex
+.gitmodules
+__pycache__/
+.venv/
+.vscode/
+.claude/

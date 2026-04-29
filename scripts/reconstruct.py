@@ -35,6 +35,15 @@ def main() -> int:
                    help="Max median reprojection error (px) to accept a bounce")
     p.add_argument("--window-seconds", type=float, default=0.4,
                    help="Half-window of frames around each bounce to fit")
+    p.add_argument("--no-chain-arcs", action="store_true",
+                   help="Disable extending output to half-time of neighbouring "
+                        "bounces (default: chained, with per-frame reproj gate)")
+    p.add_argument("--chain-reproj-gate", type=float, default=50.0,
+                   help="Per-frame reproj gate (px) when chaining arcs")
+    p.add_argument("--min-vz-down", type=float, default=1.0,
+                   help="Min |v_z| (m/s, downward) at bounce to accept")
+    p.add_argument("--enable-spin", action="store_true",
+                   help="Allow Magnus during pre-bounce fit (default: locked off)")
     p.add_argument("--frame-range", type=int, nargs=2, default=None)
     args = p.parse_args()
 
@@ -78,6 +87,10 @@ def main() -> int:
         t, pts_2d, q_sol, K, rvec, tvec,
         fps=args.fps, reproj_threshold=args.reproj_threshold,
         window_seconds=args.window_seconds,
+        chain_arcs=not args.no_chain_arcs,
+        chain_reproj_gate=args.chain_reproj_gate,
+        min_vz_down=args.min_vz_down,
+        lock_spin=not args.enable_spin,
         verbose=True,
     )
     print(f"[reconstruct] accepted {len(fits)} bounces:")

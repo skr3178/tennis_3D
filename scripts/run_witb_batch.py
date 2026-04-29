@@ -110,10 +110,15 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--max-id", type=int, default=5,
                    help="Run ids 0..max-id (real-GT clips are 0-5)")
-    p.add_argument("--reproj-threshold", type=float, default=10.0)
+    p.add_argument("--reproj-threshold", type=float, default=20.0)
     p.add_argument("--window-seconds", type=float, default=0.4)
     p.add_argument("--summary-csv", type=Path,
                    default=PROJ / "data" / "witb_summary.csv")
+    p.add_argument("--no-chain-arcs", action="store_true",
+                   help="Pass --no-chain-arcs to reconstruct.py")
+    p.add_argument("--min-vz-down", type=float, default=1.0)
+    p.add_argument("--chain-reproj-gate", type=float, default=50.0)
+    p.add_argument("--enable-spin", action="store_true")
     args = p.parse_args()
 
     rows = []
@@ -140,13 +145,25 @@ def main() -> int:
             run([PYTHON, str(PROJ / "scripts" / "make_ball_csv.py"),
                  "--src", str(rally_dir / "wasb_full.csv"),
                  "--dst", str(rally_dir / "ball_traj_2D.csv")])
-            run([PYTHON, str(PROJ / "scripts" / "reconstruct.py"),
-                 str(rally_dir),
-                 "--fps", "25",
-                 "--reproj-threshold", str(args.reproj_threshold),
-                 "--window-seconds", str(args.window_seconds)])
+            recon_cmd = [PYTHON, str(PROJ / "scripts" / "reconstruct.py"),
+                         str(rally_dir),
+                         "--fps", "25",
+                         "--reproj-threshold", str(args.reproj_threshold),
+                         "--window-seconds", str(args.window_seconds),
+                         "--min-vz-down", str(args.min_vz_down),
+                         "--chain-reproj-gate", str(args.chain_reproj_gate)]
+            if args.no_chain_arcs:
+                recon_cmd.append("--no-chain-arcs")
+            if args.enable_spin:
+                recon_cmd.append("--enable-spin")
+            run(recon_cmd)
         except RuntimeError as e:
             print(f"[batch] FAILED clip {idx}: {e}")
+            # Remove stale outputs so evaluate() doesn't read leftover CSVs
+            for stale in ("ball_traj_3D.csv", "bounces.csv"):
+                p = rally_dir / stale
+                if p.exists():
+                    p.unlink()
 
         row = evaluate(rally_dir, gt_json)
         rows.append(row)

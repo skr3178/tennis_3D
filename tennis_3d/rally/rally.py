@@ -58,8 +58,11 @@ def reconstruct_arcs(
     verbose: bool = False,
     bounce_y_max: float = 11.885,    # singles baseline
     bounce_x_max: float = 5.485,     # doubles sideline
-    min_vz_down: float = 2.0,        # |v_z| at bounce must exceed this
+    min_vz_down: float = 1.0,        # |v_z| at bounce must exceed this
     window_seconds: float = 0.4,     # half-window for fit (trim from breakpoints)
+    chain_arcs: bool = True,         # extend output beyond fit window
+    chain_reproj_gate: float = 50.0, # px gate when chaining (drop drift)
+    lock_spin: bool = True,          # if False, allow Magnus during pre-bounce fit
 ) -> List[ArcFit]:
     """For each interior break q in q_sol, attempt to reconstruct it as a
     court bounce. Returns one ArcFit per accepted candidate.
@@ -141,7 +144,7 @@ def reconstruct_arcs(
                     rvec,
                     tvec,
                     init_params=init,
-                    lock_spin=True,
+                    lock_spin=lock_spin,
                     verbose=False,
                 )
             except Exception as e:
@@ -190,7 +193,74 @@ def reconstruct_arcs(
                       f"{tag}")
             if vz_ok and err_ok:
                 fits.append(best)
-    return fits
+
+    if not chain_arcs or not fits:
+        return fits
+
+    # Extend each accepted arc out to the half-time between its bounce and
+    # the previous/next accepted bounces (or to the first/last visible frame
+    # at the ends). Per-frame reproj gate drops frames where the spin-locked
+    # physics has drifted too far from the WASB observation.
+    extended: List[ArcFit] = []
+    for k, fit in enumerate(fits):
+        q_self = int(q_sol[fit.q_idx])
+        t_q = t[q_self]
+        if k > 0:
+            t_prev = t[int(q_sol[fits[k - 1].q_idx])]
+            lo_t = 0.5 * (t_prev + t_q)
+        else:
+            lo_t = t[0]
+        if k < len(fits) - 1:
+            t_next = t[int(q_sol[fits[k + 1].q_idx])]
+            hi_t = 0.5 * (t_q + t_next)
+        else:
+            hi_t = t[-1]
+
+        mask = (t >= lo_t) & (t <= hi_t)
+        idx_ext = np.where(mask)[0]
+        idx_ext = idx_ext[idx_ext != q_self]
+        if len(idx_ext) < 2:
+            extended.append(fit)
+            continue
+
+        t_rel = t[idx_ext] - t_q
+        pts_ext = traj_2d[idx_ext, :2]
+        try:
+            traj_ext = np.array(rebuild(t_rel, fit.bounce_pt_world,
+                                        fit.v_pre, fit.w_pre))
+        except Exception as e:
+            if verbose:
+                print(f"  chain k={k}: rebuild failed ({type(e).__name__}: {e})")
+            extended.append(fit)
+            continue
+        if traj_ext.ndim == 1:
+            traj_ext = traj_ext.reshape(-1, 3)
+
+        proj_ext = project(traj_ext, rvec, tvec, K)
+        res = np.linalg.norm(proj_ext - pts_ext, axis=1)
+        keep = res <= chain_reproj_gate
+        if int(keep.sum()) < 2:
+            extended.append(fit)
+            continue
+
+        if verbose:
+            print(f"  chain k={k} q_frame={fit.q_frame}: extended "
+                  f"{len(idx_ext)} -> kept {int(keep.sum())} "
+                  f"(gate={chain_reproj_gate:.0f}px, "
+                  f"max_res={res.max():.1f}px)")
+
+        extended.append(ArcFit(
+            q_idx=fit.q_idx,
+            q_frame=fit.q_frame,
+            bounce_pt_world=fit.bounce_pt_world,
+            v_pre=fit.v_pre,
+            w_pre=fit.w_pre,
+            err=fit.err,
+            median_px=fit.median_px,
+            t_window=t[idx_ext][keep],
+            traj_window_world=traj_ext[keep],
+        ))
+    return extended
 
 
 def stitch_3d_csv(

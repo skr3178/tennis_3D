@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Tennis 3D ball + PromptHMR skeleton</title>
+<style>
+  body { margin: 0; background: #0b1320; color: #cfd9e4; font-family: monospace; }
+  #canvas-wrap { position: absolute; top: 0; left: 0; right: 0; bottom: 60px; }
+  #controls {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+    padding: 8px 14px; box-sizing: border-box;
+    background: #131a2a; border-top: 1px solid #25334a;
+    display: flex; align-items: center; gap: 10px;
+  }
+  #controls button {
+    background: #25334a; color: #cfd9e4; border: 1px solid #3a4d6e;
+    padding: 6px 12px; cursor: pointer; font-family: monospace;
+  }
+  #controls button:hover { background: #3a4d6e; }
+  #scrub { flex: 1; }
+  #info { font-size: 12px; min-width: 240px; text-align: right; }
+  #legend {
+    position: absolute; top: 10px; left: 10px;
+    background: rgba(19, 26, 42, 0.85); padding: 8px 12px;
+    border: 1px solid #25334a; font-size: 12px; line-height: 1.6;
+  }
+  #status {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(19, 26, 42, 0.85); padding: 8px 12px;
+    border: 1px solid #25334a; font-size: 12px;
+  }
+  .swatch {
+    display: inline-block; width: 12px; height: 12px; vertical-align: middle;
+    margin-right: 6px; border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+<div id="canvas-wrap"></div>
+<div id="legend">
+  <div><span class="swatch" style="background:#FFD700"></span>ball (physics)</div>
+  <div><span class="swatch" style="background:#FF6FA0"></span>ball (interp)</div>
+  <div><span class="swatch" style="background:#22cc22"></span>ball (bounce)</div>
+  <div><span class="swatch" style="background:#33ddff"></span>ball (racket)</div>
+</div>
+<div id="status">loading…</div>
+<div id="controls">
+  <button id="play">Play</button>
+  <button id="reset">Reset</button>
+  <input id="scrub" type="range" min="0" max="100" value="0" />
+  <div id="info">frame 0 / 0 (0.00 s)</div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const wrap = document.getElementById('canvas-wrap');
+const W = () => wrap.clientWidth;
+const H = () => wrap.clientHeight;
+const status = document.getElementById('status');
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b1320);
+
+const camera = new THREE.PerspectiveCamera(45, W()/H(), 0.05, 500);
+camera.position.set(8, 8, 8);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(W(), H());
+wrap.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0, 0);
+controls.update();
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const dir = new THREE.DirectionalLight(0xffffff, 0.6);
+dir.position.set(8, 10, 6);
+scene.add(dir);
+
+window.addEventListener('resize', () => {
+  camera.aspect = W()/H();
+  camera.updateProjectionMatrix();
+  renderer.setSize(W(), H());
+});
+
+// === Ball + trail ===
+const ball = new THREE.Mesh(
+  new THREE.SphereGeometry(0.05, 24, 16),
+  new THREE.MeshStandardMaterial({ color: 0xffd700, emissive: 0x444400 })
+);
+scene.add(ball);
+
+const trailLen = 30;
+const trailGeo = new THREE.BufferGeometry();
+trailGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(trailLen * 3), 3));
+const trail = new THREE.Line(trailGeo,
+    new THREE.LineBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0.7 }));
+scene.add(trail);
+
+const SRC_COLOR = {
+  'phys': 0xffd700, 'interp': 0xff6fa0,
+  'bounce': 0x22cc22, 'racket': 0x33ddff,
+};
+
+let mixer = null;
+let actions = [];
+let glbScene = null;
+let animDuration = 0;       // seconds
+let data = null;
+let cur = 0;
+let playing = false;
+
+const clock = new THREE.Clock();
+const scrub = document.getElementById('scrub');
+const info = document.getElementById('info');
+const playBtn = document.getElementById('play');
+const resetBtn = document.getElementById('reset');
+
+function fitCameraToScene(obj) {
+  const box = new THREE.Box3().setFromObject(obj);
+  const sz = new THREE.Vector3(); box.getSize(sz);
+  const ctr = new THREE.Vector3(); box.getCenter(ctr);
+  const maxDim = Math.max(sz.x, sz.y, sz.z);
+  const fitDist = maxDim / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
+  camera.position.copy(ctr).add(new THREE.Vector3(maxDim * 1.5, maxDim * 1.0, maxDim * 1.5));
+  controls.target.copy(ctr);
+  camera.near = Math.max(0.01, fitDist / 100);
+  camera.far = fitDist * 20;
+  camera.updateProjectionMatrix();
+  controls.update();
+  console.log('scene bounds:', sz.toArray(), 'center:', ctr.toArray());
+}
+
+function setFrame(fi) {
+  if (!data) return;
+  cur = Math.max(0, Math.min(data.n_frames - 1, fi));
+  scrub.value = cur;
+  info.textContent = `frame ${cur} / ${data.n_frames - 1} (${(cur / data.fps).toFixed(2)} s)`;
+
+  // Drive GLB animations: set each action's time directly, then run a
+  // zero-delta update to push joint transforms into the scene.
+  if (mixer) {
+    const t = Math.min(cur / data.fps, animDuration);
+    for (const action of actions) {
+      action.time = t % action.getClip().duration;
+    }
+    mixer.update(0);
+  }
+
+  // Ball in PromptHMR world frame (matches GLB skeleton frame)
+  const bp = data.ball_phmr ? data.ball_phmr[cur] : null;
+  if (bp) {
+    ball.position.set(bp[0], bp[1], bp[2]);
+    ball.visible = true;
+    const src = data.ball_src[cur] || 'phys';
+    ball.material.color.setHex(SRC_COLOR[src] || 0xffd700);
+  } else {
+    ball.visible = false;
+  }
+
+  // Trail
+  const positions = trailGeo.attributes.position.array;
+  let count = 0;
+  for (let k = 0; k < trailLen; k++) {
+    const f = cur - (trailLen - 1 - k);
+    if (f < 0) continue;
+    const p = data.ball_phmr ? data.ball_phmr[f] : null;
+    if (!p) continue;
+    positions[count*3 + 0] = p[0];
+    positions[count*3 + 1] = p[1];
+    positions[count*3 + 2] = p[2];
+    count++;
+  }
+  trailGeo.setDrawRange(0, count);
+  trailGeo.attributes.position.needsUpdate = true;
+}
+
+scrub.addEventListener('input', () => setFrame(parseInt(scrub.value)));
+playBtn.addEventListener('click', () => {
+  playing = !playing;
+  playBtn.textContent = playing ? 'Pause' : 'Play';
+  clock.getDelta();        // reset
+});
+resetBtn.addEventListener('click', () => {
+  setFrame(0); playing = false; playBtn.textContent = 'Play';
+});
+
+// === Load both data and GLB in parallel ===
+status.textContent = 'loading viewer_data.json …';
+const dataReq = fetch('viewer_data.json').then(r => r.json());
+
+status.textContent = 'loading world4d.glb …';
+const loader = new GLTFLoader();
+const glbReq = new Promise((resolve, reject) => {
+  loader.load('world4d.glb',
+    g => resolve(g),
+    p => { if (p.total) status.textContent = `GLB ${(p.loaded/p.total*100|0)}%`; },
+    e => reject(e));
+});
+
+Promise.all([dataReq, glbReq]).then(([d, gltf]) => {
+  data = d;
+  glbScene = gltf.scene;
+  scene.add(glbScene);
+
+  console.log('GLB animations:', gltf.animations.map(
+      a => `${a.name} dur=${a.duration.toFixed(2)}s tracks=${a.tracks.length}`));
+  console.log('GLB scene tree (first 30 nodes):');
+  let count = 0;
+  glbScene.traverse(o => {
+    if (count++ < 30) console.log('  ', o.type, o.name);
+  });
+  if (gltf.animations.length > 0) {
+    mixer = new THREE.AnimationMixer(glbScene);
+    actions = gltf.animations.map(clip => {
+      const action = mixer.clipAction(clip);
+      action.setLoop(THREE.LoopRepeat);
+      action.clampWhenFinished = false;
+      action.enabled = true;
+      action.play();
+      action.paused = false;
+      return action;
+    });
+    animDuration = Math.max(...gltf.animations.map(a => a.duration));
+  } else {
+    console.warn('GLB has no animations -- skeletons will be static');
+  }
+  fitCameraToScene(glbScene);
+
+  scrub.max = data.n_frames - 1;
+  status.textContent = `loaded: ${data.n_frames} frames @ ${data.fps} fps, ` +
+                       `GLB anim ${animDuration.toFixed(2)}s, ${gltf.animations.length} clips`;
+  setFrame(0);
+}).catch(err => {
+  status.textContent = 'ERROR: ' + err.message;
+  console.error(err);
+});
+
+let lastT = performance.now();
+function tick(now) {
+  const dt = (now - lastT) / 1000;
+  lastT = now;
+  if (data && playing) {
+    const advance = Math.max(1, Math.round(data.fps * dt));
+    let next = cur + advance;
+    if (next >= data.n_frames) next = 0;
+    setFrame(next);
+  }
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

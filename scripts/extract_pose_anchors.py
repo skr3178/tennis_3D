@@ -189,8 +189,8 @@ def main() -> int:
     finite = np.isfinite(closest)
     # Find local minima in -closest (so negative-prominence becomes positive)
     minus = np.where(finite, -closest, -1e9)
-    peaks, _ = find_peaks(minus, distance=8, height=-args.impact_px,
-                          prominence=15.0)
+    peaks, _ = find_peaks(minus, distance=20, height=-args.impact_px,
+                          prominence=20.0)
     print(f"[pose] {len(peaks)} local-minimum impact candidates "
           f"(threshold={args.impact_px}px)")
 

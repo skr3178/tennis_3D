@@ -81,7 +81,25 @@ def main() -> int:
     Rcw = pose["Rcw"]                            # (N, 3, 3) world->phmr-cam
     Tcw = pose["Tcw"]                            # (N, 3)
 
-    impacts_pids = pd.read_csv(rd / "impacts.csv")["pid"].tolist()
+    # Per-player scale: solve for s_p such that ankle court z = 0 for that
+    # player's typical ankle pos. PromptHMR's depth scale is non-uniform
+    # across players, so a single global scale undershoots the far one.
+    R_c2c = T_cam_to_court[:3, :3]
+    t_c2c = T_cam_to_court[:3, 3]
+    player_scale: dict[int, float] = {}
+    for p_idx in range(joints_3d_world.shape[0]):
+        s_obs = []
+        for f in range(joints_3d_world.shape[1]):
+            for j in (J_LANKLE, J_RANKLE):
+                a_w = joints_3d_world[p_idx, f, j]
+                a_c = Rcw[f] @ a_w + Tcw[f]
+                denom = float(R_c2c[2] @ a_c)
+                if abs(denom) < 1e-3:
+                    continue
+                s_obs.append(-float(t_c2c[2]) / denom)
+        s = float(np.median(s_obs))
+        player_scale[int(pids[p_idx])] = s
+        print(f"[anchor] pid={pids[p_idx]} per-player scale={s:.3f}")
 
     impacts = pd.read_csv(rd / "impacts.csv")
     print(f"[anchor] {len(impacts)} candidate impacts")
@@ -104,12 +122,12 @@ def main() -> int:
         # along that axis is what we need. Without knowing PromptHMR's up,
         # use the largest-magnitude component as a proxy.
         diff = wrist_w - ankle_w
-        # Better: use the camera-frame Y axis (downward in image) as proxy
-        # for height: cam Y is roughly -world up.
         diff_cam = Rcw[f] @ diff
-        h_above_ground = float(-diff_cam[1])      # cam Y down -> negate for up
-        # Sanity clamp: tennis racket reaches ~ 0.5 .. 3.5 m
-        h_above_ground = float(np.clip(h_above_ground, 0.3, 4.0))
+        # cam Y points down -> negate for up. Multiply by per-player scale
+        # to convert PromptHMR's compressed heights to real-world meters.
+        h_phmr = float(-diff_cam[1])
+        s = player_scale[pid]
+        h_above_ground = float(np.clip(h_phmr * s, 0.3, 3.5))
         u = float(r["ball_u"]); v = float(r["ball_v"])
         ball_court = ray_at_height(K_ours, rvec, tvec, u, v, h_above_ground)
         if ball_court is None:

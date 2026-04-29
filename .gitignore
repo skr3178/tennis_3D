@@ -1,5 +1,7 @@
 # Symlinks to external rally clips (not redistributable)
 data/*/rally.mp4
+# Symlink to PromptHMR-generated GLB scene (large, lives outside repo)
+data/*/world4d.glb
 
 # Python
 __pycache__/

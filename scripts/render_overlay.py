@@ -67,6 +67,8 @@ def main() -> int:
     p.add_argument("--video", default=None)
     p.add_argument("--out", default=None)
     p.add_argument("--fps", type=float, default=50.0)
+    p.add_argument("--csv-3d", default="ball_traj_3D.csv",
+                   help="Filename of the 3D CSV inside rally_dir")
     args = p.parse_args()
 
     rdir: Path = args.rally_dir
@@ -74,7 +76,7 @@ def main() -> int:
     out_path = Path(args.out) if args.out else rdir / "ball_3d_overlay.mp4"
     cam_yaml = rdir / "camera.yaml"
     csv_2d = rdir / "ball_traj_2D.csv"
-    csv_3d = rdir / "ball_traj_3D.csv"
+    csv_3d = rdir / args.csv_3d
     for q in (video, cam_yaml, csv_2d, csv_3d):
         if not q.exists():
             print(f"ERROR: missing {q}", file=sys.stderr)
@@ -88,7 +90,9 @@ def main() -> int:
                    for r in traj2}
 
     df3 = pd.read_csv(csv_3d)
-    by_frame_3d = {int(r["idx"]): np.array([r["x"], r["y"], r["z"]])
+    has_src = "src" in df3.columns
+    by_frame_3d = {int(r["idx"]): (np.array([r["x"], r["y"], r["z"]]),
+                                   r["src"] if has_src else "phys")
                    for _, r in df3.iterrows()}
 
     cap = cv2.VideoCapture(str(video))
@@ -128,9 +132,13 @@ def main() -> int:
                 n_drawn_2d += 1
 
         if fi in by_frame_3d:
-            p3 = by_frame_3d[fi]
+            p3, src = by_frame_3d[fi]
             proj = project_points(p3.reshape(1, 3), rvec, tvec, K)[0]
-            cv2.circle(frame, (int(proj[0]), int(proj[1])), 9, (255, 200, 0), 2)
+            color = {"phys": (255, 200, 0),
+                     "interp": (180, 180, 180),
+                     "racket": (0, 200, 255),
+                     "bounce": (0, 200, 0)}.get(src, (255, 200, 0))
+            cv2.circle(frame, (int(proj[0]), int(proj[1])), 9, color, 2)
             n_drawn_3d += 1
             cv2.putText(
                 frame,
@@ -138,7 +146,7 @@ def main() -> int:
                 (int(proj[0]) + 12, int(proj[1])),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.45,
-                (255, 200, 0),
+                color,
                 1,
                 cv2.LINE_AA,
             )

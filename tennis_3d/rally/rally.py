@@ -61,7 +61,7 @@ def reconstruct_arcs(
     min_vz_down: float = 1.0,        # |v_z| at bounce must exceed this
     window_seconds: float = 0.4,     # half-window for fit (trim from breakpoints)
     chain_arcs: bool = True,         # extend output beyond fit window
-    chain_reproj_gate: float = 50.0, # px gate when chaining (drop drift)
+    chain_reproj_gate: float = 100.0, # px gate when chaining (drop drift)
     lock_spin: bool = True,          # if False, allow Magnus during pre-bounce fit
 ) -> List[ArcFit]:
     """For each interior break q in q_sol, attempt to reconstruct it as a
@@ -273,6 +273,11 @@ def stitch_3d_csv(
         return None
     rows = []
     for fit in fits:
+        # Include the bounce frame itself (excluded from t_window because
+        # rebuild_diff splits at t=0).
+        bt = fit.q_frame / fps
+        bp = fit.bounce_pt_world
+        rows.append((float(bt), float(bp[0]), float(bp[1]), float(bp[2])))
         for tk, pk in zip(fit.t_window, fit.traj_window_world):
             rows.append((float(tk), float(pk[0]), float(pk[1]), float(pk[2])))
     if not rows:

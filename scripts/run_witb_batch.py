@@ -117,7 +117,7 @@ def main() -> int:
     p.add_argument("--no-chain-arcs", action="store_true",
                    help="Pass --no-chain-arcs to reconstruct.py")
     p.add_argument("--min-vz-down", type=float, default=1.0)
-    p.add_argument("--chain-reproj-gate", type=float, default=50.0)
+    p.add_argument("--chain-reproj-gate", type=float, default=100.0)
     p.add_argument("--enable-spin", action="store_true")
     args = p.parse_args()
 

@@ -38,7 +38,7 @@ def main() -> int:
     p.add_argument("--no-chain-arcs", action="store_true",
                    help="Disable extending output to half-time of neighbouring "
                         "bounces (default: chained, with per-frame reproj gate)")
-    p.add_argument("--chain-reproj-gate", type=float, default=50.0,
+    p.add_argument("--chain-reproj-gate", type=float, default=100.0,
                    help="Per-frame reproj gate (px) when chaining arcs")
     p.add_argument("--min-vz-down", type=float, default=1.0,
                    help="Min |v_z| (m/s, downward) at bounce to accept")
